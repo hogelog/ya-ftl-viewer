@@ -2,13 +2,11 @@ package org.hogel.resource;
 
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
+import org.hogel.ServerResource;
 import org.hogel.listener.FtlListener;
 import org.hogel.listener.ResourceHandlerListener;
 import org.junit.After;
 import org.junit.Before;
-
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 public abstract class ResourceTestCase {
     private static class JerseyTestWrapper extends JerseyTest {
@@ -30,7 +28,9 @@ public abstract class ResourceTestCase {
         jersey.tearDown();
     }
 
-    protected abstract String packageName();
+    public String packageName() {
+        return ServerResource.class.getPackage().getName();
+    }
 
     private WebAppDescriptor descriptor() {
         return new WebAppDescriptor.Builder(packageName())
