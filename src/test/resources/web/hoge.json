@@ -1,4 +1,5 @@
 {
+  "import": ["default.json"],
   "data": {
     "name": "hogelog"
   }

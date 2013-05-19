@@ -9,9 +9,15 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class JsonDataTest {
     @Test
-    public void hoge() throws IOException {
+    public void readJson() throws IOException {
         JsonData data = JsonData.load("src/test/resources/web/hoge.json").get();
         assertThat((String) data.getData().get("name"), is("hogelog"));
+    }
+
+    @Test
+    public void importData() throws IOException {
+        JsonData data = JsonData.load("src/test/resources/web/hoge.json").get();
+        assertThat(Number.class.cast(data.getData().get("id")).intValue(), is(10));
     }
 
 }
