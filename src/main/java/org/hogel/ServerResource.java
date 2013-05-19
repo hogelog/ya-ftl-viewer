@@ -30,7 +30,6 @@ public class ServerResource {
     Request request;
 
     @GET
-    @Produces("text/plain")
     public Response process(@PathParam("path") String path) throws IOException, TemplateException {
         Optional<List<ResourceHandler>> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(context);
         for (ResourceHandler handler : handlers.get()) {
