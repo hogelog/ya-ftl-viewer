@@ -8,6 +8,8 @@ import freemarker.template.TemplateException;
 import org.hogel.JsonData;
 import org.hogel.ServerConfig;
 import org.hogel.ServerVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Request;
@@ -18,6 +20,8 @@ import java.io.StringWriter;
 import java.util.Map;
 
 public class FtlResourceHandler implements ResourceHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(FtlResourceHandler.class);
+
     @Override
     public Optional<Response> process(ServletContext context, Request request, String path) {
         Optional<Configuration> optionalConfig = ServerVariable.FTL_CONFIG.get(context);
@@ -32,21 +36,25 @@ public class FtlResourceHandler implements ResourceHandler {
         File ftlFile;
         File jsonFile;
         if (serverConfig.isPresent()) {
-            // server confif file is present
+            // server config file is present
             ftlFile = new File(serverConfig.get().getBaseDir(), path + ".ftl");
             jsonFile = new File(serverConfig.get().getBaseDir(), path + ".json");
         } else {
-            // server confif file is not present
+            // server config file is not present
             ftlFile = new File(path + ".ftl");
             jsonFile = new File(path + ".json");
         }
         if (!ftlFile.exists()) {
             return Optional.absent();
         }
+
+        LOG.info("process ftl: {}", ftlFile);
+
         try {
             Optional<JsonData> data = JsonData.load(jsonFile);
             Template template = config.getTemplate(ftlFile.getPath());
             String html = processTemplate(template, data);
+            LOG.info(html);
             return Optional.of(Response.ok(html).type("text/html").build());
         } catch (Exception e) {
             throw new RuntimeException(e);

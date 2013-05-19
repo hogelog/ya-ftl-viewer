@@ -1,9 +1,6 @@
 package org.hogel.listener;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
-import com.google.common.io.Files;
-import net.arnx.jsonic.JSON;
 import org.hogel.ServerConfig;
 import org.hogel.ServerVariable;
 import org.slf4j.Logger;
@@ -20,7 +17,6 @@ public class ConfigListener implements ServletContextListener {
     public static String DEFAULT_CONFIG_FILE_NAME = "config.json";
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigListener.class);
-    private String configPath;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

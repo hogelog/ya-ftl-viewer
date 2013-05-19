@@ -10,7 +10,6 @@ import org.hogel.listener.FtlListener;
 import org.hogel.listener.ResourceHandlerListener;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 import java.io.IOException;
 
 public class FtlServer {

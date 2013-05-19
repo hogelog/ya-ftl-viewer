@@ -1,13 +1,12 @@
 package org.hogel.resource;
 
 import com.google.common.base.Optional;
-import com.sun.jersey.api.core.ResourceContext;
 import freemarker.template.TemplateException;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.ServerConfiguration;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.hogel.ServerVariable;
 import org.hogel.handler.ResourceHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
@@ -21,6 +20,8 @@ import java.util.List;
 
 @Path("{path: .*}")
 public class ServerResource {
+    private static final Logger LOG = LoggerFactory.getLogger(ServerResource.class);
+
     @Context
     ServletContext servletContext;
 
@@ -29,6 +30,8 @@ public class ServerResource {
 
     @GET
     public Response process(@PathParam("path") String path) throws IOException, TemplateException {
+        LOG.info("access: {}", path);
+
         Optional<List<ResourceHandler>> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(servletContext);
         for (ResourceHandler handler : handlers.get()) {
             Optional<Response> response = handler.process(servletContext, request, path);
