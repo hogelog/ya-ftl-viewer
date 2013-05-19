@@ -18,7 +18,6 @@ public class FtlListener implements ServletContextListener {
         Configuration config = new Configuration();
         config.setDefaultEncoding("UTF-8");
         ServerVariable.FTL_CONFIG.set(context, config);
-//        config.setDirectoryForTemplateLoading(new File("."));
     }
 
     @Override

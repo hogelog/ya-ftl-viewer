@@ -3,6 +3,7 @@ package org.hogel.resource;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
 import org.hogel.listener.FtlListener;
+import org.hogel.listener.ResourceHandlerListener;
 import org.junit.After;
 import org.junit.Before;
 
@@ -33,8 +34,8 @@ public abstract class ResourceTestCase {
 
     private WebAppDescriptor descriptor() {
         return new WebAppDescriptor.Builder(packageName())
-//                .initParam("com.sun.jersey.spi.container.ContainerRequestFilters", "com.sun.jersey.api.container.filter.LoggingFilter")
                 .contextListenerClass(FtlListener.class)
+                .contextListenerClass(ResourceHandlerListener.class)
                 .build();
     }
 

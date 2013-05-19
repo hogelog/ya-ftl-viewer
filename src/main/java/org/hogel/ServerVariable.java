@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 
 public enum ServerVariable {
     FTL_CONFIG,
+    SERVER_RESOURCE_HANDLER,
     ;
 
     public void set(ServletContext context, Object value) {
