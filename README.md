@@ -4,6 +4,7 @@ For easy mock development with freemarker.
 ## Feture
 - Show freemarker (.ftl) file
 - Import data from JSON
+- Serve static file (js, css, png, html, …)
 - Stand alone application (no servlet container)
 
 ## Example
