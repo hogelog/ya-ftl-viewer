@@ -5,24 +5,32 @@ import com.google.common.base.Optional;
 import com.google.common.io.Files;
 import net.arnx.jsonic.JSON;
 
-import javax.servlet.ServletContext;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.channels.Channels;
 import java.util.Map;
 
 public class ServerConfig {
     private final Map<String, Object> configMap;
+    private final int port;
     File baseDir;
     public ServerConfig(Map<String, Object> configMap) {
         this.configMap = configMap;
         baseDir = getFile("baseDir");
+        port = getNumber("port").intValue();
     }
 
     public File getBaseDir() {
         return baseDir;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    private Number getNumber(String key) {
+        Number value = (Number) configMap.get(key);
+        return value;
     }
 
     private File getFile(String key) {

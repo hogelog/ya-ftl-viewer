@@ -14,6 +14,7 @@ import java.util.Map;
 public class JsonData {
     private final Map<String, Object> data;
 
+    @SuppressWarnings("unchecked")
     public JsonData(File file, Map<String, Object> map) throws IOException {
         data = new HashMap<String, Object>();
         List<String> importPaths = (List<String>) map.get("import");
@@ -21,7 +22,9 @@ public class JsonData {
             File baseDir = file.getParentFile();
             importData(baseDir, importPaths);
         }
-        data.putAll((Map<String, Object>) map.get("data"));
+        Map<String, Object> mapData = (Map<String, Object>) map.get("data");
+        if (mapData != null)
+            data.putAll(mapData);
     }
 
     private void importData(File baseDir, List<String> importPaths) throws IOException {

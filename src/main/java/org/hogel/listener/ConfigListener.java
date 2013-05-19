@@ -13,22 +13,21 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 @WebListener
 public class ConfigListener implements ServletContextListener {
     public static String DEFAULT_CONFIG_FILE_NAME = "config.json";
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigListener.class);
+    private String configPath;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         try {
-            Optional<ServerConfig> serverConfig = ServerConfig.loadConfig(DEFAULT_CONFIG_FILE_NAME);
+            String configPath = getConfigPath();
+            Optional<ServerConfig> serverConfig = ServerConfig.loadConfig(configPath);
             ServerVariable.SERVER_CONFIG.set(context, serverConfig);
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
@@ -37,5 +36,13 @@ public class ConfigListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+    }
+
+    public String getConfigPath() {
+        String propertyConfigPath = System.getProperty("ftlviewer.config.path");
+        if (propertyConfigPath == null) {
+            return DEFAULT_CONFIG_FILE_NAME;
+        }
+        return propertyConfigPath;
     }
 }

@@ -8,7 +8,6 @@ import org.hogel.ServerVariable;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -27,7 +26,7 @@ public class StaticResourceHandler implements ResourceHandler {
 
         String mediaType = getMediaType(path);
 
-        if (!file.exists())
+        if (!file.exists() || file.isDirectory())
             return Optional.absent();
         try {
             byte[] data = Files.toByteArray(file);
@@ -55,6 +54,7 @@ public class StaticResourceHandler implements ResourceHandler {
             new Type("text/plain", "txt"),
             new Type("text/javascript", "js"),
             new Type("text/css", "css"),
+            new Type("text/xml", "xml"),
             new Type("application/json", "json"),
             new Type("application/zip", "zip"),
             new Type("application/pdf", "json"),

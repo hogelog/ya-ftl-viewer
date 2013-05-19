@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
 import org.hogel.ServerConfig;
-import org.hogel.ServerResource;
 import org.hogel.ServerVariable;
 import org.hogel.listener.ConfigListener;
 import org.hogel.listener.ContextCatchListener;
@@ -13,9 +12,7 @@ import org.hogel.listener.ResourceHandlerListener;
 import org.junit.After;
 import org.junit.Before;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.ws.rs.core.Context;
 
 public abstract class ResourceTestCase {
     public static class JerseyTestWrapper extends JerseyTest {

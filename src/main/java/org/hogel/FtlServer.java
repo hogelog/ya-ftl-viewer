@@ -1,29 +1,63 @@
 package org.hogel;
 
-import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
+import com.google.common.base.Optional;
 import com.sun.jersey.api.core.PackagesResourceConfig;
-import com.sun.jersey.api.core.ResourceConfig;
-import org.glassfish.grizzly.http.server.HttpServer;
+import com.sun.jersey.spi.container.servlet.ServletContainer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.hogel.listener.FtlListener;
+import org.hogel.listener.ResourceHandlerListener;
 
-import javax.ws.rs.core.UriBuilder;
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 
 public class FtlServer {
-    private static URI getBaseURI() {
-        return UriBuilder.fromUri("http://localhost/").port(9998).build();
+
+    public static int DEFAULT_PORT = 9998;
+
+    protected static Server startServer(String[] args) throws Exception {
+        ServletContextHandler contextHandler = createContextHandler();
+        Optional<ServerConfig> config = loadConfig(args);
+        int port;
+        if (config.isPresent()) {
+            port = config.get().getPort();
+            ServletContext servletContext = contextHandler.getServletContext();
+            ServerVariable.SERVER_CONFIG.set(servletContext, config);
+        } else {
+            port = DEFAULT_PORT;
+        }
+        Server server = new Server(port);
+        server.setHandler(contextHandler);
+        server.start();
+        return server;
     }
 
-    public static final URI BASE_URI = getBaseURI();
+    private static Optional<ServerConfig> loadConfig(String[] args) throws IOException {
+        if (args.length == 0)
+            return Optional.absent();
 
-    protected static HttpServer startServer() throws IOException {
-        ResourceConfig rc = new PackagesResourceConfig("org.hogel.resource");
-        return GrizzlyServerFactory.createHttpServer(BASE_URI, rc);
+        Optional<ServerConfig> config = ServerConfig.loadConfig(args[0]);
+        return config;
     }
 
-    public static void main(String[] args) throws IOException {
-        HttpServer httpServer = startServer();
+    private static ServletContextHandler createContextHandler() {
+        ServletContainer container = new ServletContainer(new PackagesResourceConfig("org.hogel.resource"));
+        ServletHolder holder = new ServletHolder(container);
+        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        contextHandler.addServlet(holder, "/*");
+
+        contextHandler.addEventListener(new FtlListener());
+        contextHandler.addEventListener(new ResourceHandlerListener());
+
+        return contextHandler;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Server server = startServer(args);
+        System.out.println("Type any key to stop server");
         System.in.read();
-        httpServer.stop();
+        server.stop();
     }
 }

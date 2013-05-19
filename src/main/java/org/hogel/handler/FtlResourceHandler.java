@@ -47,7 +47,7 @@ public class FtlResourceHandler implements ResourceHandler {
             Optional<JsonData> data = JsonData.load(jsonFile);
             Template template = config.getTemplate(ftlFile.getPath());
             String html = processTemplate(template, data);
-            return Optional.of(Response.ok(html).build());
+            return Optional.of(Response.ok(html).type("text/html").build());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,3 +1,4 @@
 {
+  "port": 9997,
   "baseDir": "src/test/resources/web"
 }

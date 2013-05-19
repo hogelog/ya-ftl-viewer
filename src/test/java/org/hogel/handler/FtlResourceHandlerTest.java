@@ -19,6 +19,6 @@ public class FtlResourceHandlerTest extends ResourceTestCase {
     public void hoge() {
         WebResource resource = jersey.resource();
         String res = resource.path("/hoge").get(String.class);
-        assertThat(res, is("Hello hogelog!\n"));
+        assertThat(res, is("Hello hogelog(10)!\n"));
     }
 }
