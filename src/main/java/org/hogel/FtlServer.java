@@ -8,11 +8,14 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.hogel.listener.FtlListener;
 import org.hogel.listener.ResourceHandlerListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
 
 public class FtlServer {
+    private static final Logger LOG = LoggerFactory.getLogger(FtlServer.class);
 
     public static int DEFAULT_PORT = 9998;
 
@@ -54,9 +57,18 @@ public class FtlServer {
     }
 
     public static void main(String[] args) throws Exception {
-        Server server = startServer(args);
-        System.out.println("Type any key to stop server");
-        System.in.read();
-        server.stop();
+        final Server server = startServer(args);
+        System.out.println("Type Control-C to stop server.");
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                try {
+                    server.stop();
+                    server.join();
+                } catch (Exception e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
+        });
     }
 }
