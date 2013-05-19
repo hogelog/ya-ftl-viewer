@@ -6,6 +6,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.hogel.JsonData;
+import org.hogel.ServerConfig;
 import org.hogel.ServerVariable;
 
 import javax.servlet.ServletContext;
@@ -19,16 +20,32 @@ import java.util.Map;
 public class FtlResourceHandler implements ResourceHandler {
     @Override
     public Optional<Response> process(ServletContext context, Request request, String path) {
-        Configuration config = ServerVariable.FTL_CONFIG.get(context);
-        String ftlName = path + ".ftl";
-        String jsonName = path + ".json";
-        File file = new File(ftlName);
-        if (!file.exists()) {
+        Optional<Configuration> optionalConfig = ServerVariable.FTL_CONFIG.get(context);
+
+        // freemarker config is not present
+        if (!optionalConfig.isPresent())
+            return Optional.absent();
+
+        Configuration config = optionalConfig.get();
+
+        Optional<ServerConfig> serverConfig = ServerVariable.SERVER_CONFIG.get(context);
+        File ftlFile;
+        File jsonFile;
+        if (serverConfig.isPresent()) {
+            // server confif file is present
+            ftlFile = new File(serverConfig.get().getBaseDir(), path + ".ftl");
+            jsonFile = new File(serverConfig.get().getBaseDir(), path + ".json");
+        } else {
+            // server confif file is not present
+            ftlFile = new File(path + ".ftl");
+            jsonFile = new File(path + ".json");
+        }
+        if (!ftlFile.exists()) {
             return Optional.absent();
         }
         try {
-            Optional<JsonData> data = JsonData.load(jsonName);
-            Template template = config.getTemplate(ftlName);
+            Optional<JsonData> data = JsonData.load(jsonFile);
+            Template template = config.getTemplate(ftlFile.getPath());
             String html = processTemplate(template, data);
             return Optional.of(Response.ok(html).build());
         } catch (Exception e) {

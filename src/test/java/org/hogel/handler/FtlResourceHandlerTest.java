@@ -11,14 +11,14 @@ public class FtlResourceHandlerTest extends ResourceTestCase {
     @Test
     public void index() {
         WebResource resource = jersey.resource();
-        String res = resource.path("/src/test/resources/web/index").get(String.class);
+        String res = resource.path("/index").get(String.class);
         assertThat(res, is("Hello!\n"));
     }
 
     @Test
     public void hoge() {
         WebResource resource = jersey.resource();
-        String res = resource.path("/src/test/resources/web/hoge").get(String.class);
+        String res = resource.path("/hoge").get(String.class);
         assertThat(res, is("Hello hogelog!\n"));
     }
 }

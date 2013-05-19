@@ -32,8 +32,8 @@ public class ServerResource {
     @GET
     @Produces("text/plain")
     public Response process(@PathParam("path") String path) throws IOException, TemplateException {
-        List<ResourceHandler> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(context);
-        for (ResourceHandler handler : handlers) {
+        Optional<List<ResourceHandler>> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(context);
+        for (ResourceHandler handler : handlers.get()) {
             Optional<Response> response = handler.process(context, request, path);
             if (response.isPresent())
                 return response.get();

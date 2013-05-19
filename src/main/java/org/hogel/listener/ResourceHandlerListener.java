@@ -1,5 +1,6 @@
 package org.hogel.listener;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import org.hogel.ServerVariable;
 import org.hogel.handler.FtlResourceHandler;
@@ -19,14 +20,14 @@ public class ResourceHandlerListener implements ServletContextListener {
                 new FtlResourceHandler(),
                 new StaticResourceHandler()
         );
-        ServerVariable.SERVER_RESOURCE_HANDLER.set(context, handlers);
+        ServerVariable.SERVER_RESOURCE_HANDLER.set(context, Optional.of(handlers));
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        List<ResourceHandler> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(context);
-        for (ResourceHandler handler : handlers) {
+        Optional<List<ResourceHandler>> handlers = ServerVariable.SERVER_RESOURCE_HANDLER.get(context);
+        for (ResourceHandler handler : handlers.get()) {
             handler.close();
         }
     }

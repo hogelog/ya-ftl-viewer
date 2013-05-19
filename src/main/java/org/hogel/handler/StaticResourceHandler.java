@@ -2,6 +2,8 @@ package org.hogel.handler;
 
 import com.google.common.base.Optional;
 import com.google.common.io.Files;
+import org.hogel.ServerConfig;
+import org.hogel.ServerVariable;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.WebApplicationException;
@@ -13,7 +15,14 @@ import java.io.IOException;
 public class StaticResourceHandler implements ResourceHandler {
     @Override
     public Optional<Response> process(ServletContext context, Request request, String path) {
-        File file = new File(path);
+        Optional<ServerConfig> serverConfig = ServerVariable.SERVER_CONFIG.get(context);
+        File file;
+        if (serverConfig.isPresent()) {
+            file = new File(serverConfig.get().getBaseDir(), path);
+        } else {
+            file = new File(path);
+        }
+
         if (!file.exists())
             return Optional.absent();
         try {

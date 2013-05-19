@@ -17,7 +17,7 @@ public class FtlListener implements ServletContextListener {
         ServletContext context = sce.getServletContext();
         Configuration config = new Configuration();
         config.setDefaultEncoding("UTF-8");
-        ServerVariable.FTL_CONFIG.set(context, config);
+        ServerVariable.FTL_CONFIG.set(context, Optional.of(config));
     }
 
     @Override

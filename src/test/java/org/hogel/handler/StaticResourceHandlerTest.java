@@ -11,7 +11,7 @@ public class StaticResourceHandlerTest extends ResourceTestCase {
     @Test
     public void test() {
         WebResource resource = jersey.resource();
-        String res = resource.path("/src/test/resources/web/index.ftl").get(String.class);
+        String res = resource.path("/index.ftl").get(String.class);
         assertThat(res, is("Hello<#if name?has_content>${name?html }</#if>!\n"));
     }
 }

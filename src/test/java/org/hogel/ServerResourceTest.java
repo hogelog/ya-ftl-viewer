@@ -19,7 +19,7 @@ public class ServerResourceTest extends ResourceTestCase {
     public void notFound() {
         WebResource resource = jersey.resource();
         try {
-            resource.path("/hoge").get(Response.class);
+            resource.path("/fugafuga").get(Response.class);
             assertTrue(false);
         } catch (UniformInterfaceException e) {
             ClientResponse res = e.getResponse();
