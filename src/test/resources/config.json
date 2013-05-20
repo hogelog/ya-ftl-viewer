@@ -1,4 +1,6 @@
 {
   "port": 9997,
-  "baseDir": "src/test/resources/web"
+  "templateDir": "src/test/resources/web/template",
+  "dataDir": "src/test/resources/web/data",
+  "staticDir": "src/test/resources/web/static"
 }

@@ -19,7 +19,7 @@ public class StaticResourceHandler implements ResourceHandler {
         Optional<ServerConfig> serverConfig = ServerVariable.SERVER_CONFIG.get(context);
         File file;
         if (serverConfig.isPresent()) {
-            file = new File(serverConfig.get().getBaseDir(), path);
+            file = new File(serverConfig.get().getStaticDir(), path);
         } else {
             file = new File(path);
         }

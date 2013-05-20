@@ -37,8 +37,8 @@ public class FtlResourceHandler implements ResourceHandler {
         File jsonFile;
         if (serverConfig.isPresent()) {
             // server config file is present
-            ftlFile = new File(serverConfig.get().getBaseDir(), path + ".ftl");
-            jsonFile = new File(serverConfig.get().getBaseDir(), path + ".json");
+            ftlFile = new File(serverConfig.get().getTemplateDir(), path + ".ftl");
+            jsonFile = new File(serverConfig.get().getDataDir(), path + ".json");
         } else {
             // server config file is not present
             ftlFile = new File(path + ".ftl");

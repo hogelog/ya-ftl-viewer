@@ -13,15 +13,27 @@ import java.util.Map;
 public class ServerConfig {
     private final Map<String, Object> configMap;
     private final int port;
-    File baseDir;
+    private final File templateDir;
+    private final File dataDir;
+    private final File staticDir;
     public ServerConfig(Map<String, Object> configMap) {
         this.configMap = configMap;
-        baseDir = getFile("baseDir");
+        templateDir = getFile("templateDir");
+        dataDir = getFile("dataDir");
+        staticDir = getFile("staticDir");
         port = getNumber("port").intValue();
     }
 
-    public File getBaseDir() {
-        return baseDir;
+    public File getTemplateDir() {
+        return templateDir;
+    }
+
+    public File getDataDir() {
+        return dataDir;
+    }
+
+    public File getStaticDir() {
+        return staticDir;
     }
 
     public int getPort() {

@@ -12,7 +12,7 @@ public class FtlResourceHandlerTest extends ResourceTestCase {
     public void index() {
         WebResource resource = jersey.resource();
         String res = resource.path("/index").get(String.class);
-        assertThat(res, is("Hello!\n"));
+        assertThat(res.contains("Hello!\n"), is(true));
     }
 
     @Test
